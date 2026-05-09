@@ -11,7 +11,7 @@ const GOOGLE_CLIENT_ID =
   "447699234633-ivo2e1c2q843scj32k5323o2rkq6h7dp.apps.googleusercontent.com";
 
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbytLuNWR4QH9hKKFrGbwuFP3XsLU9r4daZn4XT0A4qOlJ5tjOZ2R0vE4gSuyhpWiUg5xA/exec";
+  "https://script.google.com/macros/s/AKfycbxuFDzbNCcMQc0lKzzwthYOPbv7hpf7usJy-L1kqeoC3qvZHvB24jU2FqCMSD5AOfw6YQ/exec";
 
 const TOTAL_STEPS = 9;
 const ADMIN_EMAIL = "atxprestigedetailing@gmail.com";
