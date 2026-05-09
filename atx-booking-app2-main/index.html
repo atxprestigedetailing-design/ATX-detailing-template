@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google Maps -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB23qExNwsN_-kAB5qskLjk5clky-crIss&libraries=places"
+      async
+      defer
+    ></script>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#111827" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ATX Detailing" />
+
+    <!-- SEO -->
+    <meta name="description" content="Book auto and marine detailing services with ATX Prestige Detailing in Austin, TX." />
+
+    <title>ATX Prestige Detailing</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Service Worker -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/sw.js").catch(function (err) {
+            console.warn("Service worker registration failed:", err);
+          });
+        });
+      }
+    </script>
+
+    <!-- Crisp Chat -->
+    <script type="text/javascript">
+      window.$crisp = [];
+      window.CRISP_WEBSITE_ID = "773f26de-9c60-4ad0-9b56-aaafa72ad231";
+      (function () {
+        var d = document;
+        var s = d.createElement("script");
+        s.src = "https://client.crisp.chat/l.js";
+        s.async = 1;
+        d.getElementsByTagName("head")[0].appendChild(s);
+      })();
+    </script>
+  </body>
+</html>
