@@ -11,8 +11,6 @@ declare global {
 const GOOGLE_CLIENT_ID = config.googleClientId;
 const SCRIPT_URL       = config.scriptUrl;
 const TOTAL_STEPS      = 9;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ADMIN_EMAIL      = config.adminEmail;
 const ADMIN_EMAILS     = (config as any).adminEmails as string[] || [config.adminEmail];
 const isAdminEmail     = (email: string) => ADMIN_EMAILS.includes(email);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
