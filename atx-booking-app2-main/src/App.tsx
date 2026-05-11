@@ -1355,9 +1355,11 @@ export default function App() {
       <div style={{ maxWidth: 760, width: "100%" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
           <a href={config.websiteUrl} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 14, textDecoration: "none", flex: 1, minWidth: 0 }}>
-            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, backdropFilter: "blur(10px)", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }}>
-              <img src={logo} alt={config.businessName + " logo"} style={{ width: 56, height: 56, objectFit: "contain" as const }} />
-            </div>
+            {(config as any).showLogo !== false && (
+              <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, backdropFilter: "blur(10px)", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }}>
+                <img src={logo} alt={config.businessName + " logo"} style={{ width: 56, height: 56, objectFit: "contain" as const }} />
+              </div>
+            )}
             <div style={{ flex: 1, minWidth: 0 }}>
               <h1 style={{ fontSize: "clamp(1.5rem, 5vw, 2.6rem)", fontWeight: 900, letterSpacing: "-1.5px", color: "#ffffff", margin: 0, lineHeight: 1.05, textShadow: "0 2px 20px rgba(99,179,237,0.3)" }}>{config.businessName}</h1>
               <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "clamp(0.78rem, 2.2vw, 0.95rem)", marginTop: 6, marginBottom: 0, lineHeight: 1.4, fontStyle: "italic" }}>{config.tagline}</p>
@@ -1476,9 +1478,11 @@ export default function App() {
           animation:"logoIn 1s cubic-bezier(0.16,1,0.3,1) 0.3s both",
         }}>
           <div style={{ display:"flex", alignItems:"center", gap:14 }}>
-            <div style={{ width:"clamp(52px,7vw,72px)", height:"clamp(52px,7vw,72px)", borderRadius:"50%", background:"rgba(6,10,20,0.7)", border:"1.5px solid rgba(255,255,255,0.18)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, backdropFilter:"blur(12px)" }}>
-              <img src={logo} alt="ATX" style={{ width:"82%", height:"82%", objectFit:"contain" as const }} />
-            </div>
+            {(config as any).showLogo !== false && (
+              <div style={{ width:"clamp(52px,7vw,72px)", height:"clamp(52px,7vw,72px)", borderRadius:"50%", background:"rgba(6,10,20,0.7)", border:"1.5px solid rgba(255,255,255,0.18)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, backdropFilter:"blur(12px)" }}>
+                <img src={logo} alt="logo" style={{ width:"82%", height:"82%", objectFit:"contain" as const }} />
+              </div>
+            )}
             <div>
               <div style={{ fontSize:"clamp(20px,3.5vw,30px)", fontWeight:900, letterSpacing:"-0.5px", lineHeight:1, color:"#fff", textShadow:"0 2px 20px rgba(0,0,0,1), 0 0 30px rgba(59,130,246,0.4)", whiteSpace:"nowrap" as const }}>{config.businessName}</div>
               <div style={{ fontSize:"clamp(0.52rem,1.1vw,0.62rem)", letterSpacing:"0.22em", textTransform:"uppercase" as const, color:"rgba(255,255,255,0.55)", marginTop:4, textShadow:"0 1px 8px rgba(0,0,0,0.9)" }}>{config.splashTagline}</div>
@@ -1795,24 +1799,39 @@ export default function App() {
                                 </button>
                                 {copiedAmount === baseAmt && (
                                   <div style={{ fontSize: "0.78rem", color: "#059669", textAlign: "center" as const, marginTop: 6 }}>
-                                    Now open Venmo or Cash App and paste into the amount field
+                                    Amount copied — paste into your payment app
                                   </div>
                                 )}
                               </div>
 
-                              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                                <div>
-                                  <a href={VENMO_URL} target="_blank" rel="noopener noreferrer" style={{ display: "block", background: "#008CFF", color: "#fff", borderRadius: 10, padding: "8px 6px", textAlign: "center", textDecoration: "none", fontWeight: 700, fontSize: "0.82rem" }}>Venmo</a>
-                                  <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.45)", textAlign: "center" as const, marginTop: 3 }}>${baseAmt.toFixed(2)}</div>
-                                </div>
-                                <div>
-                                  <a href={CASHAPP_URL} target="_blank" rel="noopener noreferrer" style={{ display: "block", background: "#00C244", color: "#fff", borderRadius: 10, padding: "8px 6px", textAlign: "center", textDecoration: "none", fontWeight: 700, fontSize: "0.82rem" }}>Cash App</a>
-                                  <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.45)", textAlign: "center" as const, marginTop: 3 }}>${baseAmt.toFixed(2)}</div>
-                                </div>
-                                <div>
-                                  <button onClick={() => handleSquareRequest(b)} style={{ display: "block", width: "100%", background: "#111827", color: "#fff", border: "none", borderRadius: 10, padding: "8px 6px", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" }}>Card (Square)</button>
-                                  <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.45)", textAlign: "center" as const, marginTop: 3 }}>${squareAmt}</div>
-                                </div>
+                              <div style={{ display: "grid", gridTemplateColumns: config.eTransferEmail ? "1fr 1fr" : "1fr 1fr 1fr", gap: 8 }}>
+                                {/* E-Transfer (Canada) */}
+                                {config.eTransferEmail && (
+                                  <div style={{ gridColumn: "1 / -1" }}>
+                                    <div style={{ background: "#dc2626", color: "#fff", borderRadius: 10, padding: "10px 12px", textAlign: "center" as const, fontWeight: 700, fontSize: "0.82rem" }}>
+                                      E-Transfer
+                                    </div>
+                                    <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: 8, padding: "10px 12px", marginTop: 6, fontSize: "0.8rem", color: "rgba(255,255,255,0.7)" }}>
+                                      <div>📧 {config.eTransferEmail}</div>
+                                      {config.eTransferPhone && <div style={{ marginTop: 4 }}>📱 {config.eTransferPhone}</div>}
+                                      <div style={{ marginTop: 6, fontWeight: 700, color: "#34d399", fontSize: "0.85rem" }}>Amount: ${baseAmt.toFixed(2)}</div>
+                                    </div>
+                                  </div>
+                                )}
+                                {/* Venmo */}
+                                {config.venmoUrl && (
+                                  <div>
+                                    <a href={VENMO_URL} target="_blank" rel="noopener noreferrer" style={{ display: "block", background: "#008CFF", color: "#fff", borderRadius: 10, padding: "8px 6px", textAlign: "center", textDecoration: "none", fontWeight: 700, fontSize: "0.82rem" }}>Venmo</a>
+                                    <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.45)", textAlign: "center" as const, marginTop: 3 }}>${baseAmt.toFixed(2)}</div>
+                                  </div>
+                                )}
+                                {/* Cash App */}
+                                {config.cashAppUrl && (
+                                  <div>
+                                    <a href={CASHAPP_URL} target="_blank" rel="noopener noreferrer" style={{ display: "block", background: "#00C244", color: "#fff", borderRadius: 10, padding: "8px 6px", textAlign: "center", textDecoration: "none", fontWeight: 700, fontSize: "0.82rem" }}>Cash App</a>
+                                    <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.45)", textAlign: "center" as const, marginTop: 3 }}>${baseAmt.toFixed(2)}</div>
+                                  </div>
+                                )}
                               </div>
                             </div>
                             );

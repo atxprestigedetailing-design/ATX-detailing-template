@@ -7,29 +7,32 @@
 const config = {
 
   // ── Business Info ──────────────────────────────────────────
-  businessName:    "Lone Star Auto Detailing",
-  tagline:         "Where Every Car Gets the Star Treatment",
-  splashTagline:   "Premium Detailing · Austin's Finest",
-  serviceArea:     "Serving Austin, Round Rock, and Pflugerville areas.",
-  websiteUrl:      "https://lonestarautodetailing.com",
-  privacyPolicyUrl:"https://lonestarautodetailing.com/privacy-policy",
-  termsUrl:        "https://lonestarautodetailing.com/terms-and-conditions",
-  phonePlaceholder:"(512) 000-0000",
+  businessName:    "AZ Details",
+  tagline:         "Bring Back That New Car Feeling",
+  splashTagline:   "Bring Back That New Car Feeling",
+  serviceArea:     "Serving Richmond, Vancouver, Delta, and Surrey areas.",
+  websiteUrl:      "https://azdetails.ca",
+  privacyPolicyUrl:"https://azdetails.ca/privacy-policy",
+  termsUrl:        "https://azdetails.ca/terms-and-conditions",
+  phonePlaceholder:"(778) 000-0000",
 
   // ── Google / Backend ───────────────────────────────────────
-  googleClientId:  "1076917556619-fgufovdivq00k2ktv6h2qp4f1ncj6rc9.apps.googleusercontent.com",
-  scriptUrl:       "https://script.google.com/macros/s/AKfycbzVPQsVFVUVaZ8W-gHK7CNTXqL93I5qJzvXLD8hn58-izSx02V0LG7e20DmulYXqGPX7Q/exec",
-  adminEmail:      "emiliofive12@gmail.com",
+  googleClientId:  "146278786836-biqrvq4ta5k9d4p21juj3aovbraud78c.apps.googleusercontent.com",
+  scriptUrl:       "https://script.google.com/macros/s/AKfycbxzaxkfd9Qe1O-lXdmhApiB101kjxksXnyRCF0I2YaPfyHFcVvrMscXPhRlFqkMs-Igsg/exec",
+  adminEmail:      "zhangaaron222@gmail.com",
 
   // ── Payment Links ──────────────────────────────────────────
-  venmoUrl:        "https://venmo.com/u/lonestarauto",
-  cashAppUrl:      "https://cash.app/$lonestarauto",
+  eTransferEmail:  "zhangaaron222@gmail.com",
+  eTransferPhone:  "778-926-7102",
+  venmoUrl:        "",
+  cashAppUrl:      "",
 
   // ── Spline 3D Splash ───────────────────────────────────────
   splineUrl:       "https://my.spline.design/zooxautonomousvehicle-swC2lsvHWZjCeAEOrYirbLPh/",
 
   // ── Branding / Theme ───────────────────────────────────────
   accentColor:     "#3b82f6",
+  showLogo:        false,
 
 };
 
