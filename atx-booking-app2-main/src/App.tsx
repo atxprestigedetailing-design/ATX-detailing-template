@@ -1076,24 +1076,6 @@ export default function App() {
     finally { setProcessingRows(prev => { const n = new Set(prev); n.delete(booking.rowIndex); return n; }); }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function handleSquareRequest(booking: Booking) {
-    setSquareBooking(booking);
-    setSquarePopup(true);
-    // Send email to admin
-    try {
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({
-          action: "squareInvoiceRequest",
-          customerName: booking.name,
-          customerEmail: booking.email,
-          amount: booking.invoiceAmount,
-          date: booking.date,
-        }),
-      });
-    } catch (e) { console.error("Square request email failed", e); }
-  }
 
   // Static vehicle data — reliable curated list
   useEffect(() => {
