@@ -18,9 +18,9 @@ const config = {
 
   // ── Google / Backend ───────────────────────────────────────
   googleClientId:  "146278786836-biqrvq4ta5k9d4p21juj3aovbraud78c.apps.googleusercontent.com",
-  scriptUrl:       "https://script.google.com/macros/s/AKfycbw1cLFHYoWHb3vBKhFmxkqsiyC84BPTthgaB8Me4oc7jSZ6Dze0KiBiUncK5L-wdCYSbQ/exec",
+  scriptUrl:       "https://script.google.com/macros/s/AKfycbwI6u1AMXTc-3ZDbwHjft1_PvDdEHHWaKl9iKJ_8Mhituo5WXO7HQq6HHw_wgIROm_WOg/exec",
   adminEmail:      "zhangaaron222@gmail.com",
-  adminEmails:     ["zhangaaron222@gmail.com", "azdetails.ca@gmail.com"],
+  adminEmails: ["zhangaaron222@gmail.com", "azdetails.ca@gmail.com", "bookings@azdetails.ca"],
 
   // ── Payment Links ──────────────────────────────────────────
   eTransferEmail:  "zhangaaron222@gmail.com",
