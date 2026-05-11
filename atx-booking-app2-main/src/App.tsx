@@ -12,7 +12,9 @@ const GOOGLE_CLIENT_ID = config.googleClientId;
 const SCRIPT_URL       = config.scriptUrl;
 const TOTAL_STEPS      = 9;
 const ADMIN_EMAIL      = config.adminEmail;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const VENMO_URL        = config.venmoUrl;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CASHAPP_URL      = config.cashAppUrl;
 
 type AvailabilitySlot = {
@@ -1074,6 +1076,7 @@ export default function App() {
     finally { setProcessingRows(prev => { const n = new Set(prev); n.delete(booking.rowIndex); return n; }); }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function handleSquareRequest(booking: Booking) {
     setSquareBooking(booking);
     setSquarePopup(true);
