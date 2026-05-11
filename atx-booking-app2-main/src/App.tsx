@@ -11,7 +11,10 @@ declare global {
 const GOOGLE_CLIENT_ID = config.googleClientId;
 const SCRIPT_URL       = config.scriptUrl;
 const TOTAL_STEPS      = 9;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ADMIN_EMAIL      = config.adminEmail;
+const ADMIN_EMAILS     = (config as any).adminEmails as string[] || [config.adminEmail];
+const isAdminEmail     = (email: string) => ADMIN_EMAILS.includes(email);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const VENMO_URL        = config.venmoUrl;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1529,7 +1532,7 @@ export default function App() {
               <button onClick={() => setView("booking")} style={{ ...S.secondary, padding: "9px 14px", fontSize: "0.9rem" }}>Back</button>
               <h2 style={{ ...S.title, margin: 0, fontSize: "1.8rem" }}>My Bookings</h2>
               <div style={{ display: "flex", gap: 8, marginLeft: "auto" }}>
-                {googleUser?.email === ADMIN_EMAIL && (
+                {isAdminEmail(googleUser?.email || "") && (
                   <button onClick={() => { setView("admin"); loadAdminBookings(); }} style={{ ...S.secondary, padding: "10px 16px", fontSize: "0.9rem" }}>Admin</button>
                 )}
                 <button onClick={() => { setView("booking"); setStep(1); }} style={{ ...S.primary, padding: "10px 16px", fontSize: "0.9rem" }}>Book New Service</button>
@@ -1856,7 +1859,7 @@ export default function App() {
   }
 
   // ADMIN VIEW
-  if (view === "admin" && googleUser?.email === ADMIN_EMAIL) {
+  if (view === "admin" && isAdminEmail(googleUser?.email || "")) {
     const filtered = adminBookings.filter(b => {
       if (adminFilter === "upcoming") return isUpcoming(b.date) && b.status !== "Completed" && b.status !== "Cancelled" && b.status !== "Skipped";
       if (adminFilter === "past") return !isUpcoming(b.date) || b.status === "Completed" || b.status === "Cancelled" || b.status === "Skipped";
@@ -3651,7 +3654,7 @@ export default function App() {
   }
 
   // ── INVENTORY VIEW ──────────────────────────────────────────────────────────
-  if (view === "inventory" && googleUser?.email === ADMIN_EMAIL) {
+  if (view === "inventory" && isAdminEmail(googleUser?.email || "")) {
     const CATEGORIES = ["All", "Microfiber & Towels", "Polishing Pads", "Compounds & Polishes", "Chemicals & Cleaners", "Ceramic Coatings", "Tools & Equipment", "Brushes & Applicators", "Sandpaper & Abrasives", "Accessories & Misc"];
 
     const isLowStock = (item: { quantity: string; lowStockThreshold: string }) => {
@@ -4071,10 +4074,10 @@ export default function App() {
                 <p className="stagger-3" style={{ ...S.subtitle, marginBottom: 32, fontSize: "1.05rem" }}>{config.serviceArea}</p>
                 <div className="stagger-4" style={{ display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap" as const, marginBottom: 28 }}>
                   <button style={{ ...S.primary, padding: "16px 32px", fontSize: "1.05rem", letterSpacing: "-0.3px" }} onClick={() => setStep(1)}>Book a Service →</button>
-                  {googleUser && googleUser.email === ADMIN_EMAIL && (
+                  {googleUser && isAdminEmail(googleUser.email) && (
                     <button style={{ ...S.primary, background: "linear-gradient(135deg, #059669, #047857)" }} onClick={() => { setView("admin"); loadAdminBookings(); }}>Admin Panel</button>
                   )}
-                  {googleUser && googleUser.email === ADMIN_EMAIL && (
+                  {googleUser && isAdminEmail(googleUser.email) && (
                     <button style={{ ...S.primary, background: "linear-gradient(135deg, #7c3aed, #5b21b6)" }} onClick={() => { setView("inventory"); loadInventory(); }}>Inventory</button>
                   )}
                   {googleUser && (
