@@ -1,5 +1,6 @@
 import logo from "./assets/logo.png";
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import config from "./config";
 
 declare global {
   interface Window {
@@ -7,16 +8,12 @@ declare global {
   }
 }
 
-const GOOGLE_CLIENT_ID =
-  "447699234633-ivo2e1c2q843scj32k5323o2rkq6h7dp.apps.googleusercontent.com";
-
-const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxuFDzbNCcMQc0lKzzwthYOPbv7hpf7usJy-L1kqeoC3qvZHvB24jU2FqCMSD5AOfw6YQ/exec";
-
-const TOTAL_STEPS = 9;
-const ADMIN_EMAIL = "atxprestigedetailing@gmail.com";
-const VENMO_URL = "https://venmo.com/u/emilio512";
-const CASHAPP_URL = "https://cash.app/$Emiliofive12";
+const GOOGLE_CLIENT_ID = config.googleClientId;
+const SCRIPT_URL       = config.scriptUrl;
+const TOTAL_STEPS      = 9;
+const ADMIN_EMAIL      = config.adminEmail;
+const VENMO_URL        = config.venmoUrl;
+const CASHAPP_URL      = config.cashAppUrl;
 
 type AvailabilitySlot = {
   date: string;
@@ -1357,13 +1354,13 @@ export default function App() {
     <div style={{ display: "flex", justifyContent: "center", marginBottom: 36 }}>
       <div style={{ maxWidth: 760, width: "100%" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
-          <a href="https://atxprestigedetailing.com" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 14, textDecoration: "none", flex: 1, minWidth: 0 }}>
+          <a href={config.websiteUrl} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 14, textDecoration: "none", flex: 1, minWidth: 0 }}>
             <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, backdropFilter: "blur(10px)", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }}>
-              <img src={logo} alt="ATX Prestige Detailing logo" style={{ width: 56, height: 56, objectFit: "contain" as const }} />
+              <img src={logo} alt={config.businessName + " logo"} style={{ width: 56, height: 56, objectFit: "contain" as const }} />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <h1 style={{ fontSize: "clamp(1.5rem, 5vw, 2.6rem)", fontWeight: 900, letterSpacing: "-1.5px", color: "#ffffff", margin: 0, lineHeight: 1.05, textShadow: "0 2px 20px rgba(99,179,237,0.3)" }}>ATX Prestige Detailing</h1>
-              <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "clamp(0.78rem, 2.2vw, 0.95rem)", marginTop: 6, marginBottom: 0, lineHeight: 1.4, fontStyle: "italic" }}>Defined by Detail, Driven by Standards, Trusted for Prestige</p>
+              <h1 style={{ fontSize: "clamp(1.5rem, 5vw, 2.6rem)", fontWeight: 900, letterSpacing: "-1.5px", color: "#ffffff", margin: 0, lineHeight: 1.05, textShadow: "0 2px 20px rgba(99,179,237,0.3)" }}>{config.businessName}</h1>
+              <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "clamp(0.78rem, 2.2vw, 0.95rem)", marginTop: 6, marginBottom: 0, lineHeight: 1.4, fontStyle: "italic" }}>{config.tagline}</p>
             </div>
           </a>
         </div>
@@ -1462,7 +1459,7 @@ export default function App() {
           `}</style>
           <iframe
             className="spline-frame"
-            src="https://my.spline.design/zooxautonomousvehicle-swC2lsvHWZjCeAEOrYirbLPh/"
+            src={config.splineUrl}
             frameBorder={0}
             style={{ position:"absolute", inset:0, width:"100%", height:"100%", border:"none" }}
           />
@@ -1483,8 +1480,8 @@ export default function App() {
               <img src={logo} alt="ATX" style={{ width:"82%", height:"82%", objectFit:"contain" as const }} />
             </div>
             <div>
-              <div style={{ fontSize:"clamp(20px,3.5vw,30px)", fontWeight:900, letterSpacing:"-0.5px", lineHeight:1, color:"#fff", textShadow:"0 2px 20px rgba(0,0,0,1), 0 0 30px rgba(59,130,246,0.4)", whiteSpace:"nowrap" as const }}>ATX Prestige Detailing</div>
-              <div style={{ fontSize:"clamp(0.52rem,1.1vw,0.62rem)", letterSpacing:"0.22em", textTransform:"uppercase" as const, color:"rgba(255,255,255,0.55)", marginTop:4, textShadow:"0 1px 8px rgba(0,0,0,0.9)" }}>Defined by Detail · Driven by Standards</div>
+              <div style={{ fontSize:"clamp(20px,3.5vw,30px)", fontWeight:900, letterSpacing:"-0.5px", lineHeight:1, color:"#fff", textShadow:"0 2px 20px rgba(0,0,0,1), 0 0 30px rgba(59,130,246,0.4)", whiteSpace:"nowrap" as const }}>{config.businessName}</div>
+              <div style={{ fontSize:"clamp(0.52rem,1.1vw,0.62rem)", letterSpacing:"0.22em", textTransform:"uppercase" as const, color:"rgba(255,255,255,0.55)", marginTop:4, textShadow:"0 1px 8px rgba(0,0,0,0.9)" }}>{config.splashTagline}</div>
             </div>
           </div>
         </div>
@@ -4067,7 +4064,7 @@ export default function App() {
               <div style={{ textAlign: "center" as const, padding: "16px 0 24px" }}>
                 <div className="stagger-1" style={{ display: "inline-block", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.18em", color: "rgba(99,179,237,0.8)", textTransform: "uppercase" as const, marginBottom: 16, background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.25)", borderRadius: 999, padding: "5px 16px" }}>Premium Auto & Marine Detailing</div>
                 <h2 className="stagger-2" style={{ ...S.title, fontSize: "clamp(2.2rem, 7vw, 3.8rem)", marginBottom: 12, background: "linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Detailing, Elevated.</h2>
-                <p className="stagger-3" style={{ ...S.subtitle, marginBottom: 32, fontSize: "1.05rem" }}>Serving Lago Vista, Cedar Park, and Leander areas.</p>
+                <p className="stagger-3" style={{ ...S.subtitle, marginBottom: 32, fontSize: "1.05rem" }}>{config.serviceArea}</p>
                 <div className="stagger-4" style={{ display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap" as const, marginBottom: 28 }}>
                   <button style={{ ...S.primary, padding: "16px 32px", fontSize: "1.05rem", letterSpacing: "-0.3px" }} onClick={() => setStep(1)}>Book a Service →</button>
                   {googleUser && googleUser.email === ADMIN_EMAIL && (
@@ -4508,7 +4505,7 @@ export default function App() {
                       style={{ width: 18, height: 18, marginTop: 2, accentColor: "#3b82f6", flexShrink: 0, cursor: "pointer" }}
                     />
                     <span style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>
-                      <strong style={{ color: "#f1f5f9" }}>Transactional SMS:</strong> I agree to receive booking confirmations, appointment reminders, job status updates, and payment notifications via SMS from ATX Prestige Detailing. Message frequency varies. Message & data rates may apply. Reply <strong style={{ color: "#f1f5f9" }}>STOP</strong> to unsubscribe. Reply <strong style={{ color: "#f1f5f9" }}>HELP</strong> for help.
+                      <strong style={{ color: "#f1f5f9" }}>Transactional SMS:</strong> I agree to receive booking confirmations, appointment reminders, job status updates, and payment notifications via SMS from {config.businessName}. Message frequency varies. Message & data rates may apply. Reply <strong style={{ color: "#f1f5f9" }}>STOP</strong> to unsubscribe. Reply <strong style={{ color: "#f1f5f9" }}>HELP</strong> for help.
                     </span>
                   </label>
 
@@ -4521,14 +4518,14 @@ export default function App() {
                       style={{ width: 18, height: 18, marginTop: 2, accentColor: "#3b82f6", flexShrink: 0, cursor: "pointer" }}
                     />
                     <span style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>
-                      <strong style={{ color: "#f1f5f9" }}>Marketing SMS:</strong> I agree to receive promotional offers, seasonal specials, and marketing messages from ATX Prestige Detailing. Message frequency varies. Message & data rates may apply. Reply <strong style={{ color: "#f1f5f9" }}>STOP</strong> to unsubscribe at any time.
+                      <strong style={{ color: "#f1f5f9" }}>Marketing SMS:</strong> I agree to receive promotional offers, seasonal specials, and marketing messages from {config.businessName}. Message frequency varies. Message & data rates may apply. Reply <strong style={{ color: "#f1f5f9" }}>STOP</strong> to unsubscribe at any time.
                     </span>
                   </label>
 
                   <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.35)", lineHeight: 1.5 }}>
                     Both checkboxes are optional. You may submit your booking without checking either. View our{" "}
-                    <a href="https://atxprestigedetailing.com/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: "#93c5fd" }}>Privacy Policy</a>{" "}and{" "}
-                    <a href="https://atxprestigedetailing.com/terms-and-conditions" target="_blank" rel="noopener noreferrer" style={{ color: "#93c5fd" }}>Terms & Conditions</a>.
+                    <a href={config.privacyPolicyUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#93c5fd" }}>Privacy Policy</a>{" "}and{" "}
+                    <a href={config.termsUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#93c5fd" }}>Terms & Conditions</a>.
                   </div>
                 </div>
               )}
@@ -4704,7 +4701,7 @@ export default function App() {
                   </button>
                 ) : (
                   <a
-                    href="https://atxprestigedetailing.com"
+                    href={config.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ ...S.primary, padding: "12px 22px", fontSize: "0.95rem", textDecoration: "none", display: "inline-block" }}
