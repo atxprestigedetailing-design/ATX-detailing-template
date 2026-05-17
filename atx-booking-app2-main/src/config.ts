@@ -16,7 +16,7 @@ const config = {
 
   // ── Google / Backend ───────────────────────────────────────
   googleClientId:  "977132071454-cj8aej2004nfosgtlv7clmkp51j3jckv.apps.googleusercontent.com",
-  scriptUrl:       "https://script.google.com/macros/s/AKfycbzGovV8315psHWI2jhnD3ns5bid5-xasM951rCLBl6pDatVBlPGK_ZkY8Q5RVpuh9tf7w/exec",
+  scriptUrl:       "https://script.google.com/macros/s/AKfycbwwFegjHau8Ke56UA2fAF5V-64ao0EtU8mPsST70svUjLlz7Dmhj8Jza7HAwGNiBevBew/exec",
   adminEmail:      "zhangaaron222@gmail.com",
   adminEmails:     [
     "zhangaaron222@gmail.com",
@@ -32,7 +32,7 @@ const config = {
   cashAppUrl:      "",
 
   // ── Spline 3D Splash ───────────────────────────────────────
-  splineUrl:       "https://my.spline.design/zooxautonomousvehicle-swC2lsvHWZjCeAEOrYirbLPh/",
+  splineUrl:       "https://my.spline.design/particlesforwebsite-nNFUzGD3mq05mAtDQPEK4Ucj/",
 
   // ── Branding ───────────────────────────────────────────────
   accentColor:     "#3b82f6",
