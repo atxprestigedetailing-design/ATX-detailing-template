@@ -15,8 +15,8 @@ const config = {
   termsUrl:        "https://azdetails.ca/terms-and-conditions",
 
   // ── Google / Backend ───────────────────────────────────────
-  googleClientId:  "146278786836-biqrvq4ta5k9d4p21juj3aovbraud78c.apps.googleusercontent.com",
-  scriptUrl:       "https://script.google.com/macros/s/AKfycbwBmlWHxbFjsUqebCNEgEe7HZfGlXGLbwe2a3E5zV4CGVG2Rq9nTSnqVmgld7jXwLT4Eg/exec",
+  googleClientId:  "977132071454-cj8aej2004nfosgtlv7clmkp51j3jckv.apps.googleusercontent.com",
+  scriptUrl:       "https://script.google.com/macros/s/AKfycbxN3uqzEOU1UWHKQc4bJzEoJuEZ7OMfNSapGRRRXsKxu1ueNBtUN0zj1WyK4vpZ58bBug/exec",
   adminEmail:      "zhangaaron222@gmail.com",
   adminEmails:     [
     "zhangaaron222@gmail.com",
