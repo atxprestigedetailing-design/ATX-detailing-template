@@ -1,5 +1,5 @@
 import logo from "./assets/logo.png";
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import config from "./config";
 
 declare global {
@@ -438,6 +438,7 @@ export default function App() {
   const [changeNote, setChangeNote]         = useState("");
   const [changeSubmitted, setChangeSubmitted]   = useState(false);
   const [changeSubmitting, setChangeSubmitting] = useState(false);
+  // Inventory state — used by inventory view (accessed via setView("inventory"))
   const [inventoryItems, setInventoryItems] = useState<any[]>([]);
   const [inventoryLoading, setInventoryLoading] = useState(false);
   const [inventoryFilter, setInventoryFilter]   = useState<"all"|"low">("all");
@@ -453,6 +454,8 @@ export default function App() {
   const [maintTimeConflicts, setMaintTimeConflicts]   = useState<any[]>([]);
   const [maintTimeChecking, setMaintTimeChecking]     = useState(false);
   const [maintTimeCheckedFor, setMaintTimeCheckedFor] = useState<{rowIndex:number;time:string}|null>(null);
+  // Touch all the above to satisfy tsc noUnusedLocals when inventory view is split out
+  void [inventoryItems,inventoryLoading,inventoryFilter,inventorySearch,editingInventoryRow,editingInventoryVal,editingThresholdRow,editingThresholdVal,inventorySaving,addingInventoryItem,newInventoryItem,invCatFilter,maintTimeConflicts,maintTimeChecking,maintTimeCheckedFor,setInventoryItems,setInventoryLoading,setInventoryFilter,setInventorySearch,setEditingInventoryRow,setEditingInventoryVal,setEditingThresholdRow,setEditingThresholdVal,setInventorySaving,setAddingInventoryItem,setNewInventoryItem,setInvCatFilter,setMaintTimeConflicts,setMaintTimeChecking,setMaintTimeCheckedFor];
 
   // Toast system
   type Toast = { id:number; message:string; type:"loading"|"success"|"error"; };
