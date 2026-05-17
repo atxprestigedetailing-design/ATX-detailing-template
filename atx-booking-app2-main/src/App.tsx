@@ -83,9 +83,9 @@ type DiscountResult = { valid: boolean; pct: number; amount: number; label: stri
 type AvailabilitySlot = { date: string; time: string; available?: boolean; };
 
 const vehicleOptions = [
-  { id: "truckSuv" as VehicleType, label: "Truck / SUV", icon: "🛻" },
-  { id: "sedan"    as VehicleType, label: "Sedan",        icon: "🚗" },
-  { id: "coupe"    as VehicleType, label: "Coupe",        icon: "🏎️" },
+  { id: "truckSuv" as VehicleType, label: "Truck / SUV" },
+  { id: "sedan"    as VehicleType, label: "Sedan"        },
+  { id: "coupe"    as VehicleType, label: "Coupe"        },
 ];
 
 const addOnOptions: { label: AddOn; price: number }[] = [
@@ -102,17 +102,32 @@ function fmtDate(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 
+function parseBookingDate(dateStr: string): Date | null {
+  if (!dateStr) return null;
+  if (dateStr.includes("-")) {
+    const parts = dateStr.split("-").map(Number);
+    if (parts.length === 3 && parts[0] > 100) return new Date(parts[0], parts[1]-1, parts[2]); // YYYY-MM-DD
+    if (parts.length === 3) return new Date(parts[2], parts[0]-1, parts[1]); // MM-DD-YYYY fallback
+  }
+  if (dateStr.includes("/")) {
+    const parts = dateStr.split("/").map(Number);
+    if (parts.length === 3 && parts[2] > 100) return new Date(parts[2], parts[0]-1, parts[1]); // MM/DD/YYYY
+  }
+  return null;
+}
+
 function formatDateLabel(dateStr: string) {
   if (!dateStr) return "N/A";
-  const [y,m,d] = dateStr.split("-").map(Number);
-  return new Date(y,m-1,d).toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric"});
+  const dt = parseBookingDate(dateStr);
+  if (!dt || isNaN(dt.getTime())) return dateStr;
+  return dt.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric"});
 }
 
 function isUpcoming(dateStr: string) {
-  if (!dateStr) return false;
-  const [y,m,d] = dateStr.split("-").map(Number);
+  const dt = parseBookingDate(dateStr);
+  if (!dt) return false;
   const today = new Date(); today.setHours(0,0,0,0);
-  return new Date(y,m-1,d) >= today;
+  return dt >= today;
 }
 
 function calcRecurringDates(startDateStr: string, freq: string, count=6): string[] {
@@ -591,7 +606,7 @@ export default function App() {
   useEffect(()=>{
     if(!googleScriptLoaded||googleUser)return;
     if(!window.google?.accounts?.id)return;
-    window.google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleCredential});
+    window.google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleCredential,cancel_on_tap_outside:false});
   },[googleScriptLoaded,googleUser]);
 
   function handleGoogleCredential(response: any){
@@ -921,7 +936,22 @@ export default function App() {
               <button onClick={handleSignOut} style={{fontSize:"0.78rem",color:"rgba(255,255,255,0.5)",background:"none",border:"1px solid rgba(255,255,255,0.12)",borderRadius:8,padding:"4px 10px",cursor:"pointer",marginLeft:4}}>Sign out</button>
             </div>
           ):(
-            <button onClick={()=>window.google?.accounts?.id?.prompt()} style={{display:"flex",alignItems:"center",gap:10,background:"rgba(255,255,255,0.07)",border:"1px solid rgba(255,255,255,0.12)",borderRadius:12,padding:"10px 18px",fontSize:"0.9rem",fontWeight:600,cursor:"pointer",color:"#e8eaf0",backdropFilter:"blur(10px)",boxShadow:"0 4px 16px rgba(0,0,0,0.2)"}}>
+            <button onClick={()=>{
+              if(!window.google?.accounts?.id)return;
+              window.google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleCredential,cancel_on_tap_outside:false});
+              window.google.accounts.id.prompt((notification: any)=>{
+                if(notification.isNotDisplayed()||notification.isSkippedMoment()){
+                  // Fallback: render button in a temp div and click it
+                  const div=document.createElement("div");
+                  div.style.cssText="position:fixed;top:-999px;left:-999px";
+                  document.body.appendChild(div);
+                  window.google.accounts.id.renderButton(div,{theme:"outline",size:"large"});
+                  const btn=div.querySelector("div[role=button]") as HTMLElement;
+                  if(btn)btn.click();
+                  setTimeout(()=>document.body.removeChild(div),3000);
+                }
+              });
+            }} style={{display:"flex",alignItems:"center",gap:10,background:"rgba(255,255,255,0.07)",border:"1px solid rgba(255,255,255,0.12)",borderRadius:12,padding:"10px 18px",fontSize:"0.9rem",fontWeight:600,cursor:"pointer",color:"#e8eaf0",backdropFilter:"blur(10px)",boxShadow:"0 4px 16px rgba(0,0,0,0.2)"}}>
               <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{width:18,height:18}}/>
               Sign in with Google
             </button>
@@ -1378,8 +1408,6 @@ export default function App() {
                                 <div style={{fontSize:"0.8rem",color:"rgba(255,255,255,0.35)",marginBottom:10}}>Creates a pending invoice. Release it from the Invoices tab for client to see.</div>
                                 <div style={{display:"flex",gap:8,flexWrap:"wrap" as const}}>
                                   <button onClick={handleMarkComplete} disabled={completeLoading||!completeAmount} style={{background:"#059669",color:"#fff",border:"none",borderRadius:8,padding:"9px 18px",fontWeight:700,fontSize:"0.88rem",cursor:"pointer",opacity:completeLoading||!completeAmount?0.5:1}}>{completeLoading?"Saving...":"Confirm Complete"}</button>
-                                  <button onClick={async()=>{if(!b.phone){alert("No phone on file.");return;}try{await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({action:"sendJobStartedSMS",customerName:b.name,customerPhone:b.phone,serviceDate:b.date})});alert("Job started text sent!");}catch{alert("SMS failed");}}} style={{background:"#2563eb",color:"#fff",border:"none",borderRadius:8,padding:"9px 14px",fontWeight:600,fontSize:"0.82rem",cursor:"pointer"}}>📱 Text: Started</button>
-                                  <button onClick={async()=>{if(!b.phone){alert("No phone on file.");return;}try{await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({action:"sendJobCompletedSMS",customerName:b.name,customerPhone:b.phone,serviceDate:b.date})});alert("Job done text sent!");}catch{alert("SMS failed");}}} style={{background:"#7c3aed",color:"#fff",border:"none",borderRadius:8,padding:"9px 14px",fontWeight:600,fontSize:"0.82rem",cursor:"pointer"}}>📱 Text: Done</button>
                                 </div>
                                 {/* Photo upload */}
                                 <div style={{marginTop:14,padding:14,background:"rgba(59,130,246,0.08)",borderRadius:12,border:"1px solid #bae6fd"}}>
@@ -1628,7 +1656,7 @@ export default function App() {
                 {!googleUser&&<p style={{textAlign:"center" as const,color:"rgba(255,255,255,0.35)",fontSize:"0.85rem",marginBottom:20}}>Sign in with Google to view your bookings.</p>}
               </div>
               <div style={{borderTop:"1px solid rgba(255,255,255,0.07)",paddingTop:18,display:"flex",gap:8,flexWrap:"wrap" as const,justifyContent:"center"}}>
-                {["Interior Detail — $169","Exterior Detail — $139","Interior + Exterior — $279","Maintenance Plans"].map(tag=>(
+                {["Interior Detail","Exterior Detail","Interior + Exterior","Maintenance Plans","Mobile Service"].map(tag=>(
                   <span key={tag} style={{background:"rgba(255,255,255,0.06)",borderRadius:999,padding:"6px 16px",fontSize:"0.82rem",color:"rgba(255,255,255,0.5)",fontWeight:500,border:"1px solid rgba(255,255,255,0.10)"}}>{tag}</span>
                 ))}
               </div>
@@ -1643,7 +1671,6 @@ export default function App() {
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:14,marginBottom:20}}>
                 {vehicleOptions.map(option=>(
                   <button key={option.id} style={{...S.optionCard,...(vehicle===option.id?S.selectedCard:{})}} onClick={()=>{setVehicle(option.id);setPkg("");setMake("");setModel("");setMakeOptions([]);setModelOptions([]);setAddOns([]);}}>
-                    <div style={{fontSize:"2rem",marginBottom:10}}>{option.icon}</div>
                     <div style={S.optionTitle}>{option.label}</div>
                   </button>
                 ))}
@@ -1776,12 +1803,10 @@ export default function App() {
               <p style={S.subtitle}>Mobile service or drop-off?</p>
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:14,marginBottom:20}}>
                 <button style={{...S.optionCard,...(serviceType==="mobile"?S.selectedCard:{})}} onClick={()=>{setServiceType("mobile");setAddressSelected(false);}}>
-                  <div style={{fontSize:"2rem",marginBottom:10}}>🚗</div>
                   <div style={S.optionTitle}>Mobile Service</div>
                   <div style={S.optionMeta}>We come to you — home, office, wherever.</div>
                 </button>
                 <button style={{...S.optionCard,...(serviceType==="dropoff"?S.selectedCard:{})}} onClick={()=>{setServiceType("dropoff");setAddress("");setStreet("");setCity("");setStateRegion("");setZip("");setPlaceId("");setLat("");setLng("");setAddressSelected(false);}}>
-                  <div style={{fontSize:"2rem",marginBottom:10}}>🏢</div>
                   <div style={S.optionTitle}>Drop-Off</div>
                   <div style={S.optionMeta}>Drop off your vehicle. We'll send location details.</div>
                 </button>
