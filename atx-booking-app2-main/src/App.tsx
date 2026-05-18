@@ -64,7 +64,7 @@ const SLOT_HOURS = [
 ];
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type VehicleType  = "truckSuv" | "sedan" | "coupe" | "";
+type VehicleType  = "truck" | "suv" | "sedan" | "coupe" | "";
 type PackageType  = "basic" | "interior" | "exterior" | "";
 type ServiceType  = "mobile" | "dropoff" | "";
 type ClientType   = "oneTime" | "maintenance" | "";
@@ -95,9 +95,10 @@ type DiscountResult = { valid: boolean; pct: number; amount: number; label: stri
 type AvailabilitySlot = { date: string; time: string; available?: boolean; };
 
 const vehicleOptions = [
-  { id: "truckSuv" as VehicleType, label: "Truck / SUV" },
-  { id: "sedan"    as VehicleType, label: "Sedan"        },
-  { id: "coupe"    as VehicleType, label: "Coupe"        },
+  { id: "truck" as VehicleType, label: "Truck"  },
+  { id: "suv"   as VehicleType, label: "SUV"    },
+  { id: "sedan" as VehicleType, label: "Sedan"  },
+  { id: "coupe" as VehicleType, label: "Coupe"  },
 ];
 
 const addOnOptions: { label: AddOn; price: number; consultation?: boolean }[] = [
@@ -768,7 +769,8 @@ export default function App() {
     if(!vehicle){setMakeOptions([]);return;}
     const carMakes=["Acura","Alfa Romeo","Audi","BMW","Buick","Cadillac","Chevrolet","Chrysler","Dodge","Ferrari","Fiat","Ford","Genesis","GMC","Honda","Hyundai","Infiniti","Jaguar","Jeep","Kia","Lamborghini","Land Rover","Lexus","Lincoln","Maserati","Mazda","Mercedes-Benz","Mini","Mitsubishi","Nissan","Porsche","Ram","Rivian","Rolls-Royce","Subaru","Tesla","Toyota","Volkswagen","Volvo"];
     const truckMakes=["Chevrolet","Ford","GMC","Ram","Toyota","Nissan","Honda","Jeep","Land Rover","Lexus","Lincoln","Cadillac","Rivian","Mercedes-Benz"];
-    setMakeOptions(vehicle==="truckSuv"?truckMakes:carMakes);
+    const suvMakes=["Chevrolet","Ford","GMC","Ram","Toyota","Nissan","Honda","Jeep","Land Rover","Lexus","Lincoln","Cadillac","Rivian","Mercedes-Benz","Acura","Audi","BMW","Buick","Dodge","Genesis","Hyundai","Infiniti","Kia","Mazda","Mini","Mitsubishi","Porsche","Subaru","Tesla","Volkswagen","Volvo"];
+    setMakeOptions(vehicle==="truck"?truckMakes:vehicle==="suv"?suvMakes:carMakes);
   },[vehicle]);
 
   useEffect(()=>{
@@ -1953,23 +1955,7 @@ export default function App() {
                 )}
               </div>
 
-              {selectedDate&&selectedTime&&name&&phone&&email&&(
-                <div style={{marginTop:16,background:"rgba(59,130,246,0.06)",border:"1px solid rgba(59,130,246,0.2)",borderRadius:14,padding:"16px 16px",display:"flex",flexDirection:"column" as const,gap:14}}>
-                  <div style={{fontSize:"0.78rem",fontWeight:700,color:"#93c5fd",textTransform:"uppercase" as const,letterSpacing:"0.06em"}}>SMS Notifications (Optional)</div>
-                  <label style={{display:"flex",alignItems:"flex-start",gap:12,cursor:"pointer"}}>
-                    <input type="checkbox" checked={smsConsent} onChange={e=>setSmsConsent(e.target.checked)} style={{width:18,height:18,marginTop:2,accentColor:"#3b82f6",flexShrink:0,cursor:"pointer"}}/>
-                    <span style={{fontSize:"0.82rem",color:"rgba(255,255,255,0.6)",lineHeight:1.6}}><strong style={{color:"#f1f5f9"}}>Transactional SMS:</strong> Confirmations, reminders, job updates. Reply STOP to unsubscribe. HELP for help. Msg & data rates may apply.</span>
-                  </label>
-                  <label style={{display:"flex",alignItems:"flex-start",gap:12,cursor:"pointer"}}>
-                    <input type="checkbox" checked={smsMarketingConsent} onChange={e=>setSmsMarketingConsent(e.target.checked)} style={{width:18,height:18,marginTop:2,accentColor:"#3b82f6",flexShrink:0,cursor:"pointer"}}/>
-                    <span style={{fontSize:"0.82rem",color:"rgba(255,255,255,0.6)",lineHeight:1.6}}><strong style={{color:"#f1f5f9"}}>Marketing SMS:</strong> Promotions and seasonal specials. Reply STOP to unsubscribe at any time.</span>
-                  </label>
-                  <div style={{fontSize:"0.75rem",color:"rgba(255,255,255,0.35)",lineHeight:1.5}}>
-                    Optional. Submit booking without checking either. See our{" "}
-                    <a href={config.privacyPolicyUrl} target="_blank" rel="noopener noreferrer" style={{color:"#93c5fd"}}>Privacy Policy</a>.
-                  </div>
-                </div>
-              )}
+
 
               <div style={S.buttonRow}>
                 <button style={S.secondary} onClick={back}>Back</button>

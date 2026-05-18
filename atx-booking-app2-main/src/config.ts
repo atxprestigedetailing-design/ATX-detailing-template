@@ -16,7 +16,7 @@ const config = {
 
   // ── Google / Backend ───────────────────────────────────────
   googleClientId:  "977132071454-cj8aej2004nfosgtlv7clmkp51j3jckv.apps.googleusercontent.com",
-  scriptUrl:       "https://script.google.com/macros/s/AKfycbykOi22u1CQlmJsUJjEZXNSYs1ilMZnKH-s98Lpdd8mJ5rlYBqktDLr20FhbkF9H8qVkw/exec",
+  scriptUrl:       "https://script.google.com/macros/s/AKfycbzfwtjyd9XiNQBB_OIL-WHTIKlJOPYTk5wpn7Vks6wpzaf8I0gVhcNPtXrReeLHRvBvDA/exec",
   adminEmail:      "zhangaaron222@gmail.com",
   adminEmails:     [
     "zhangaaron222@gmail.com",
