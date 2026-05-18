@@ -509,8 +509,8 @@ export default function App() {
   const [serviceType, setServiceType] = useState<ServiceType>("");
   const [name, setName]               = useState("");
   const [phone, setPhone]             = useState("");
-  const [smsConsent, setSmsConsent]               = useState(false);
-  const [smsMarketingConsent, setSmsMarketingConsent] = useState(false);
+  const [smsConsent] = useState(false);
+  const [smsMarketingConsent] = useState(false);
   const [email, setEmail]             = useState("");
   const [year, setYear]               = useState("");
   const [make, setMake]               = useState("");
