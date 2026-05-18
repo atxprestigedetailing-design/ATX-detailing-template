@@ -13,10 +13,18 @@ const ADMIN_EMAILS     = (config as any).adminEmails as string[] || [config.admi
 const isAdminEmail     = (email: string) => ADMIN_EMAILS.includes(email);
 
 // ── AZ Details flat-rate package prices ──────────────────────────────────────
+// ── Real (discounted) prices shown to client ──────────────────────────────────
 const PACKAGE_PRICES: Record<string, number> = {
-  basic:    279,  // Interior + Exterior
-  interior: 169,  // Interior Only
-  exterior: 139,  // Exterior Only
+  basic:    129,  // Interior + Exterior (was $279)
+  interior: 109,  // Interior Only       (was $169)
+  exterior:  89,  // Exterior Only       (was $139)
+};
+
+// ── Original "crossed out" prices for display ─────────────────────────────────
+const PACKAGE_ORIGINAL_PRICES: Record<string, number> = {
+  basic:    279,
+  interior: 169,
+  exterior: 139,
 };
 
 const PACKAGE_LABELS: Record<string, string> = {
@@ -29,19 +37,22 @@ const PACKAGE_INCLUDES: Record<string, string[]> = {
   basic: [
     "Thorough Vacuuming","Full Steam Cleaning","High-Pressure Air Blasting",
     "Scrubbing & Decontamination","Streakless Windows & Mirrors","Fabric & Carpet Shampooing",
-    "Leather & Plastic Conditioning","Full Rims, Tires, Exhaust & Gas Cap",
-    "Pre-Wash, Foam Bath & Contact Wash","Tire Shine & Door Jamb Cleaning",
-    "Waxes, Sealants & Machine Waxing","Claybar & Iron Decontamination",
+    "Leather & Plastic Conditioning","Odour Removal / Deodorizing","Seat Shampoo or Leather Cleaning",
+    "Full Rims, Tires, Exhaust & Gas Cap Cleaning","Pre-Wash, Foam Bath & Contact Wash",
+    "Bug & Tar Removal","Tire Shine & Door Jamb Cleaning",
+    "Iron Decontamination","Hydrophobic Protector Wax","Paint Sealant Protection",
   ],
   interior: [
     "Thorough Vacuuming","Full Steam Cleaning","High-Pressure Air Blasting",
     "Scrubbing & Decontamination","Streakless Windows & Mirrors",
     "Fabric & Carpet Shampooing","Leather & Plastic Conditioning",
+    "Odour Removal / Deodorizing","Seat Shampoo or Leather Cleaning",
   ],
   exterior: [
-    "Full Rims, Tires, Exhaust & Gas Cap","Pre-Wash, Foam Bath & Contact Wash",
-    "Streakless Windows & Mirrors","Tire Shine & Door Jamb Cleaning",
-    "Waxes, Sealants & Machine Waxing","Claybar & Iron Decontamination",
+    "Full Rims, Tires, Exhaust & Gas Cap Cleaning","Pre-Wash, Foam Bath & Contact Wash",
+    "Bug & Tar Removal","Streakless Windows & Mirrors",
+    "Tire Shine & Door Jamb Cleaning","Iron Decontamination",
+    "Hydrophobic Protector Wax","Paint Sealant Protection",
   ],
 };
 
@@ -61,9 +72,10 @@ type FrequencyType = "biweekly" | "monthly" | "";
 
 type AddOn =
   | "Headlight Restoration"
+  | "Pet Hair Removal"
+  | "Clay Bar Treatment"
   | "Stain Removal"
   | "Paint Correction"
-  | "Pet Hair Removal"
   | "Ceramic Coating"
   | "Engine Compartment Detail";
 
@@ -88,13 +100,14 @@ const vehicleOptions = [
   { id: "coupe"    as VehicleType, label: "Coupe"        },
 ];
 
-const addOnOptions: { label: AddOn; price: number }[] = [
-  { label: "Headlight Restoration",    price: 80  },
-  { label: "Stain Removal",            price: 40  },
-  { label: "Paint Correction",         price: 150 },
-  { label: "Pet Hair Removal",         price: 40  },
-  { label: "Ceramic Coating",          price: 300 },
-  { label: "Engine Compartment Detail",price: 60  },
+const addOnOptions: { label: AddOn; price: number; consultation?: boolean }[] = [
+  { label: "Headlight Restoration",    price: 90  },
+  { label: "Pet Hair Removal",         price: 50  },
+  { label: "Clay Bar Treatment",       price: 70  },
+  { label: "Stain Removal",            price: 0,  consultation: true },
+  { label: "Paint Correction",         price: 0,  consultation: true },
+  { label: "Ceramic Coating",          price: 0,  consultation: true },
+  { label: "Engine Compartment Detail",price: 50  },
 ];
 
 // ── Helper functions ──────────────────────────────────────────────────────────
@@ -843,7 +856,7 @@ export default function App() {
   },[]);
 
   // Computed
-  const addOnTotal = addOns.reduce((s,a)=>{const o=addOnOptions.find(x=>x.label===a);return s+(o?.price||0);},0);
+  const addOnTotal = addOns.reduce((s,a)=>{const o=addOnOptions.find(x=>x.label===a);return s+(o?.consultation?0:o?.price||0);},0);
   const basePrice  = PACKAGE_PRICES[pkg]||0;
   const discountAmount = discountResult?.valid ? discountResult.amount : 0;
   const finalPrice = Math.max(0, basePrice + addOnTotal - discountAmount);
@@ -1727,17 +1740,22 @@ export default function App() {
               <p style={S.subtitle}>All packages are flat-rate — no hidden fees.</p>
               <div style={{display:"grid",gap:16,marginBottom:20}}>
                 {([
-                  {id:"basic" as PackageType,price:279,tag:"BEST VALUE"},
-                  {id:"interior" as PackageType,price:169,tag:"INTERIOR"},
-                  {id:"exterior" as PackageType,price:139,tag:"EXTERIOR"},
-                ]).map(({id,price,tag})=>(
+                  {id:"basic" as PackageType,tag:"BEST VALUE"},
+                  {id:"interior" as PackageType,tag:"INTERIOR"},
+                  {id:"exterior" as PackageType,tag:"EXTERIOR"},
+                ]).map(({id,tag})=>(
                   <button key={id} onClick={()=>setPkg(id)} style={{...S.optionCard,...(pkg===id?S.selectedCard:{}),textAlign:"left" as const,padding:20}}>
                     <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:12}}>
                       <div>
                         <span style={{background:id==="basic"?"rgba(16,185,129,0.2)":"rgba(255,255,255,0.08)",color:id==="basic"?"#34d399":"rgba(255,255,255,0.5)",fontSize:"0.65rem",fontWeight:800,borderRadius:6,padding:"2px 8px",letterSpacing:"0.06em",marginBottom:8,display:"inline-block"}}>{tag}</span>
                         <div style={{...S.optionTitle,fontSize:"1.15rem",marginBottom:2}}>{PACKAGE_LABELS[id]}</div>
                       </div>
-                      <div style={{fontSize:"2rem",fontWeight:900,color:"#f1f5f9",letterSpacing:"-1px"}}>${price}</div>
+                      {/* Crossed-out original price + discounted price */}
+                      <div style={{textAlign:"right" as const}}>
+                        <div style={{fontSize:"1rem",color:"rgba(255,255,255,0.35)",textDecoration:"line-through",lineHeight:1.2}}>${PACKAGE_ORIGINAL_PRICES[id]}</div>
+                        <div style={{fontSize:"2rem",fontWeight:900,color:"#34d399",letterSpacing:"-1px",lineHeight:1.1}}>${PACKAGE_PRICES[id]}</div>
+                        <div style={{fontSize:"0.65rem",color:"rgba(52,211,153,0.7)",fontWeight:700,letterSpacing:"0.04em"}}>LIMITED OFFER</div>
+                      </div>
                     </div>
                     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"4px 12px"}}>
                       {PACKAGE_INCLUDES[id].map(item=>(
@@ -1752,8 +1770,11 @@ export default function App() {
               {pkg&&(
                 <div style={{background:"rgba(16,185,129,0.1)",border:"1px solid #6ee7b7",borderRadius:16,padding:16,textAlign:"center" as const,marginBottom:8}}>
                   <div style={{fontSize:"0.85rem",color:"#10b981",marginBottom:4}}>{PACKAGE_LABELS[pkg]}</div>
-                  <div style={{fontSize:"2.2rem",fontWeight:900,color:"#34d399"}}>${PACKAGE_PRICES[pkg]}</div>
-                  <div style={{fontSize:"0.78rem",color:"rgba(255,255,255,0.45)",marginTop:4}}>Flat rate · No hidden fees</div>
+                  <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:12}}>
+                    <div style={{fontSize:"1.2rem",color:"rgba(255,255,255,0.35)",textDecoration:"line-through"}}>${PACKAGE_ORIGINAL_PRICES[pkg]}</div>
+                    <div style={{fontSize:"2.5rem",fontWeight:900,color:"#34d399"}}>${PACKAGE_PRICES[pkg]}</div>
+                  </div>
+                  <div style={{fontSize:"0.78rem",color:"rgba(255,255,255,0.45)",marginTop:4}}>Flat rate · No hidden fees · Limited time offer</div>
                 </div>
               )}
               <div style={{marginTop:10,fontSize:"0.85rem",color:"rgba(255,255,255,0.45)",textAlign:"center" as const}}>
@@ -1771,7 +1792,7 @@ export default function App() {
           {step===4&&(
             <>
               <h2 style={S.title}>Add-On Services</h2>
-              <p style={S.subtitle}>Optional extras — all fixed prices, no guesswork.</p>
+              <p style={S.subtitle}>Optional extras to enhance your detail.</p>
               <div style={{display:"grid",gap:12,marginBottom:18}}>
                 {addOnOptions.map(option=>(
                   <label key={option.label} style={{...S.addOnRow,...(addOns.includes(option.label)?{background:"rgba(59,130,246,0.12)",border:"1.5px solid rgba(59,130,246,0.4)"}:{})}}>
@@ -1779,7 +1800,10 @@ export default function App() {
                       <input style={{width:18,height:18,accentColor:"#3b82f6"}} type="checkbox" checked={addOns.includes(option.label)} onChange={()=>setAddOns(p=>p.includes(option.label)?p.filter(a=>a!==option.label):[...p,option.label])}/>
                       <span style={{fontWeight:600,color:"#f1f5f9"}}>{option.label}</span>
                     </div>
-                    <span style={{color:"#93c5fd",fontWeight:700,fontSize:"1rem"}}>${option.price}</span>
+                    {option.consultation
+                      ? <span style={{color:"rgba(255,255,255,0.4)",fontWeight:500,fontSize:"0.85rem",fontStyle:"italic"}}>Consultation required</span>
+                      : <span style={{color:"#93c5fd",fontWeight:700,fontSize:"1rem"}}>${option.price}</span>
+                    }
                   </label>
                 ))}
               </div>
